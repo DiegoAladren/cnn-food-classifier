@@ -100,7 +100,7 @@ def process_image(image_file):
     """Preprocesa la imagen para el modelo"""
     img = Image.open(image_file).convert('RGB')
     img_resized = img.resize(IMG_SIZE)
-    img_array = tf.keras.preprocessing.image.img_to_array(img_resized)
+    img_array = np.array(img_resized)
     img_array = np.expand_dims(img_array, axis=0)
     img_array = preprocess_input(img_array)
     return img, img_array
@@ -110,6 +110,12 @@ def calculate_health_score(probabilities):
     Calcula el score ponderado.
     Health Score = Sum(Probabilidad_Clase * Valor_Salud_Clase)
     """
+    # Normalización defensiva por si el modelo devuelve logits
+    probabilities = np.array(probabilities, dtype=np.float32)
+    prob_sum = probabilities.sum()
+    if prob_sum > 0:
+        probabilities = probabilities / prob_sum
+
     weighted_score = 0
     details = []
     
@@ -121,9 +127,9 @@ def calculate_health_score(probabilities):
         
         details.append({
             'Class': class_name,
-            'Probability': prob,
+            'Probability': float(prob),
             'Health Value': health_val,
-            'Contribution': contribution
+            'Contribution': float(contribution)
         })
         
     return weighted_score, details
