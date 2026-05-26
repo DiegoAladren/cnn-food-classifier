@@ -73,7 +73,6 @@ Después de darle a analizar imagen el modelo calcula la predicción y la aplica
 ## Roadmap
 
 - [x] Generar modelo de Deep Learning para analizar imágenes de comida.
-- [ ] Aplicar fine tunning al modelo para conseguir mejores resultados.
 - [x] Integrar modelo con la aplicación de streamlit.  
 - [x] Calcular estadísticas y mostrarlas en la aplicación a partir de las predicciones.
 
